@@ -205,7 +205,6 @@ body {
   opacity: 0.5;
   color: #b2b2e1;
   transition: 0.5s;
-  pointer-events: none;
 }
 
 .rotating-globe {
@@ -224,9 +223,9 @@ body {
   transition: 0.5s;
 }
 
-.button:hover {
+/* .button:hover {
   background-color: #00ffb9;
   color: #313131;
   opacity: 1;
   transition: 0.5s;
-}
+} */

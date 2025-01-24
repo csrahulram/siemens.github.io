@@ -29,37 +29,57 @@ title.addEventListener("click", toogleFullScreen);
 button.addEventListener("click", submitFeedback);
 
 function submitFeedback() {
-  button.classList.add("selected");
   effects.style.display = "block";
   thankyou.style.display = "block";
 
-  disableButton();
-
-  if(usrFeedback === 5){
-    manager.addConfetti()
+  if (usrFeedback === 5) {
+    manager.addConfetti();
   }
 
   setTimeout(() => {
     title.classList.remove("fadein");
     description.classList.remove("fadein");
-    button.classList.remove("disable");
-    button.classList.remove("selected");
     effects.style.display = "none";
+    // disableButton();
     gotoThankyou();
   }, 1500);
+
+  const xhr = new XMLHttpRequest();
+
+  xhr.open(
+    "POST",
+    "https://script.google.com/macros/s/AKfycbxIujcd8JAV12B84D-2nCEVkZgCaWMXheF5aRYydXPmRiUsgOwNhisWfbOkRMs4Fejn/exec",
+    true
+  );
+
+  // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  xhr.onreadystatechange = () => {
+    // Call a function when the state changes.
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      console.log(JSON.parse(xhr.responseText));
+    }
+  };
+
+  const formData = new FormData();
+  formData.append("Date", new Date().toLocaleDateString());
+  formData.append("Time", new Date().toLocaleTimeString());
+  formData.append("Feedback", usrFeedback);
+  formData.append("Note", "");
+  xhr.send(formData);
 }
 
 function gotoThankyou() {
   feedback.classList.add("fadeoutleft");
   thankyou.classList.add("fadeinleft");
-
+  disableButton();
   setTimeout(() => {
     feedback.classList.remove("fadeoutleft");
     thankyou.classList.remove("fadeinleft");
     clearEmoji();
+
     setTimeout(() => {
       thankyou.style.display = "none";
-      enableButton();
     }, 1000);
   }, 3000);
 }
@@ -85,23 +105,26 @@ let usrFeedback = 1;
 
 function selectFeedback(event, feedback) {
   clearEmoji();
-  enableButton();
   event.target.parentElement.getElementsByClassName(
     "emoji-circle"
   )[0].style.opacity = 1;
 
   usrFeedback = feedback;
 
-  
+  enableButton();
 }
 
 function enableButton() {
-  button.style.pointerEvents = "auto";
+  button.classList.add("select");
+  button.classList.remove("disable");
 }
 
 function disableButton() {
-  button.style.pointerEvents = "none";
+  button.classList.remove("select");
+  button.classList.add("disable");
 }
+
+disableButton();
 
 function clearEmoji() {
   usrFeedback = 1;
@@ -112,9 +135,7 @@ function clearEmoji() {
   }
 }
 
-
-
-"use strict";
+("use strict");
 
 // Utility functions grouped into a single object
 const Utils = {
@@ -152,7 +173,14 @@ const defaultConfettiConfig = {
   confettiesNumber: 100,
   confettiRadius: 4,
   confettiColors: [
-    "#fcf403", "#62fc03", "#f4fc03", "#03e7fc", "#03fca5", "#a503fc", "#fc03ad", "#fc03c2"
+    "#fcf403",
+    "#62fc03",
+    "#f4fc03",
+    "#03e7fc",
+    "#03fca5",
+    "#a503fc",
+    "#fc03ad",
+    "#fc03c2",
   ],
   emojies: [],
   svgIcon: null, // Example SVG link
@@ -161,25 +189,37 @@ const defaultConfettiConfig = {
 // Confetti class representing individual confetti pieces
 class Confetti {
   constructor({ initialPosition, direction, radius, colors, emojis, svgIcon }) {
-    const speedFactor = Utils.getRandomInRange(0.9, 1.7, 3) * Utils.getScaleFactor();
+    const speedFactor =
+      Utils.getRandomInRange(0.9, 1.7, 3) * Utils.getScaleFactor();
     this.speed = { x: speedFactor, y: speedFactor };
     this.finalSpeedX = Utils.getRandomInRange(0.2, 0.6, 3);
-    this.rotationSpeed = emojis.length || svgIcon ? 0.01 : Utils.getRandomInRange(0.03, 0.07, 3) * Utils.getScaleFactor();
+    this.rotationSpeed =
+      emojis.length || svgIcon
+        ? 0.01
+        : Utils.getRandomInRange(0.03, 0.07, 3) * Utils.getScaleFactor();
     this.dragCoefficient = Utils.getRandomInRange(0.0005, 0.0009, 6);
     this.radius = { x: radius, y: radius };
     this.initialRadius = radius;
-    this.rotationAngle = direction === "left" ? Utils.getRandomInRange(0, 0.2, 3) : Utils.getRandomInRange(-0.2, 0, 3);
+    this.rotationAngle =
+      direction === "left"
+        ? Utils.getRandomInRange(0, 0.2, 3)
+        : Utils.getRandomInRange(-0.2, 0, 3);
     this.emojiRotationAngle = Utils.getRandomInRange(0, 2 * Math.PI);
     this.radiusYDirection = "down";
 
-    const angle = direction === "left" ? Utils.getRandomInRange(82, 15) * DEG_TO_RAD : Utils.getRandomInRange(-15, -82) * DEG_TO_RAD;
+    const angle =
+      direction === "left"
+        ? Utils.getRandomInRange(82, 15) * DEG_TO_RAD
+        : Utils.getRandomInRange(-15, -82) * DEG_TO_RAD;
     this.absCos = Math.abs(Math.cos(angle));
     this.absSin = Math.abs(Math.sin(angle));
 
     const offset = Utils.getRandomInRange(-150, 0);
     const position = {
-      x: initialPosition.x + (direction === "left" ? -offset : offset) * this.absCos,
-      y: initialPosition.y - offset * this.absSin
+      x:
+        initialPosition.x +
+        (direction === "left" ? -offset : offset) * this.absCos,
+      y: initialPosition.y - offset * this.absSin,
     };
 
     this.position = { ...position };
@@ -210,12 +250,26 @@ class Confetti {
       context.save();
       context.translate(scale * x, scale * y);
       context.rotate(this.emojiRotationAngle);
-      context.drawImage(this.svgIcon, -radiusX, -radiusY, radiusX * 2, radiusY * 2);
+      context.drawImage(
+        this.svgIcon,
+        -radiusX,
+        -radiusY,
+        radiusX * 2,
+        radiusY * 2
+      );
       context.restore();
     } else if (this.color) {
       context.fillStyle = this.color;
       context.beginPath();
-      context.ellipse(x * scale, y * scale, radiusX * scale, radiusY * scale, this.rotationAngle, 0, 2 * Math.PI);
+      context.ellipse(
+        x * scale,
+        y * scale,
+        radiusX * scale,
+        radiusY * scale,
+        this.rotationAngle,
+        0,
+        2 * Math.PI
+      );
       context.fill();
     } else if (this.emoji) {
       context.font = `${radiusX * scale}px serif`;
@@ -235,8 +289,14 @@ class Confetti {
       this.speed.x -= this.dragCoefficient * deltaTime;
     }
 
-    this.position.x += this.speed.x * (this.direction === "left" ? -this.absCos : this.absCos) * deltaTime;
-    this.position.y = this.initialPosition.y - this.speed.y * this.absSin * elapsed + 0.00125 * Math.pow(elapsed, 2) / 2;
+    this.position.x +=
+      this.speed.x *
+      (this.direction === "left" ? -this.absCos : this.absCos) *
+      deltaTime;
+    this.position.y =
+      this.initialPosition.y -
+      this.speed.y * this.absSin * elapsed +
+      (0.00125 * Math.pow(elapsed, 2)) / 2;
 
     if (!this.emoji && !this.svgIcon) {
       this.rotationSpeed -= 1e-5 * deltaTime;
@@ -266,12 +326,16 @@ class Confetti {
 class ConfettiManager {
   constructor() {
     this.canvas = document.createElement("canvas");
-    this.canvas.style = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; pointer-events: none;";
-    document.body.getElementsByClassName('content')[0].appendChild(this.canvas);
+    this.canvas.style =
+      "position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; pointer-events: none;";
+    document.body.getElementsByClassName("content")[0].appendChild(this.canvas);
     this.context = this.canvas.getContext("2d");
     this.confetti = [];
     this.lastUpdated = Date.now();
-    window.addEventListener("resize", Utils.debounce(() => this.resizeCanvas(), 200));
+    window.addEventListener(
+      "resize",
+      Utils.debounce(() => this.resizeCanvas(), 200)
+    );
     this.resizeCanvas();
     requestAnimationFrame(() => this.loop());
   }
@@ -282,29 +346,39 @@ class ConfettiManager {
   }
 
   addConfetti(config = {}) {
-    const { confettiesNumber, confettiRadius, confettiColors, emojies, svgIcon } = {
+    const {
+      confettiesNumber,
+      confettiRadius,
+      confettiColors,
+      emojies,
+      svgIcon,
+    } = {
       ...defaultConfettiConfig,
       ...config,
     };
 
     const baseY = (5 * window.innerHeight) / 7;
     for (let i = 0; i < confettiesNumber / 2; i++) {
-      this.confetti.push(new Confetti({
-        initialPosition: { x: 0, y: baseY },
-        direction: "right",
-        radius: confettiRadius,
-        colors: confettiColors,
-        emojis: emojies,
-        svgIcon,
-      }));
-      this.confetti.push(new Confetti({
-        initialPosition: { x: window.innerWidth, y: baseY },
-        direction: "left",
-        radius: confettiRadius,
-        colors: confettiColors,
-        emojis: emojies,
-        svgIcon,
-      }));
+      this.confetti.push(
+        new Confetti({
+          initialPosition: { x: 0, y: baseY },
+          direction: "right",
+          radius: confettiRadius,
+          colors: confettiColors,
+          emojis: emojies,
+          svgIcon,
+        })
+      );
+      this.confetti.push(
+        new Confetti({
+          initialPosition: { x: window.innerWidth, y: baseY },
+          direction: "left",
+          radius: confettiRadius,
+          colors: confettiColors,
+          emojis: emojies,
+          svgIcon,
+        })
+      );
     }
   }
 
