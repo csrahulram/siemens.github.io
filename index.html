@@ -1,82 +1,93 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!-- <meta name=”apple-mobile-web-app-capable” content=”yes “>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link href="index.css" rel="stylesheet" />
-  </head>
 
-  <body>
-    <div class="content">
-      <div class="bg-wrapper">
-        <div class="bg bg-left"></div>
-        <div class="bg bg-right"></div>
-      </div>
-      <div class="content-wrapper feedback">
-        <div class="title">Feedback</div>
-        <div class="description">Feel free to share your feedback with us.</div>
-        <div class="emoji-wrapper">
-          <!-- <div class="emoji-item" onclick="selectFeedback(event, 1)">
+<head>
+  <!-- <meta name=”apple-mobile-web-app-capable” content=”yes “>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+  <link href="index.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="content">
+    <div class="siemens-logo" onTouchStart="touchstart()" onTouchEnd="touchend()"></div>
+    <div class="bg-wrapper">
+      <div class="bg bg-left"></div>
+      <div class="bg bg-right"></div>
+    </div>
+    <div class="content-wrapper feedback">
+      <div class="title">Feedback</div>
+      <div class="description">Feel free to share your feedback with us.</div>
+      <div class="emoji-wrapper">
+        <!-- <div class="emoji-item" onclick="selectFeedback(event, 1)">
             <div class="emoji-text">Worst</div>
             <div class="emoji worst"></div>
             <div class="emoji-circle"></div>
           </div> -->
 
-          <div class="emoji-item" onclick="selectFeedback(event, 1)">
-            <!-- <div class="emoji-text">Bad</div> -->
-            <div class="emoji bad"></div>
-            <div class="emoji-circle"></div>
-          </div>
-
-          <div class="emoji-item" onclick="selectFeedback(event, 2)">
-            <!-- <div class="emoji-text">OK</div> -->
-            <div class="emoji ok"></div>
-            <div class="emoji-circle"></div>
-          </div>
-
-          <div class="emoji-item" onclick="selectFeedback(event, 3)">
-            <!-- <div class="emoji-text">Good</div> -->
-            <div class="emoji good"></div>
-            <div class="emoji-circle"></div>
-          </div>
-
-          <div class="emoji-item" onclick="selectFeedback(event, 4)">
-            <!-- <div class="emoji-text">Super</div> -->
-            <div class="emoji super"></div>
-            <div class="emoji-circle"></div>
-          </div>
+        <div class="emoji-item" onclick="selectFeedback(event, 1)">
+          <!-- <div class="emoji-text">Bad</div> -->
+          <div class="emoji bad"></div>
+          <div class="emoji-circle"></div>
         </div>
-        <div class="button-wrapper">
-          <div class="effects"></div>
-          <div class="button">SUBMIT</div>
+
+        <div class="emoji-item" onclick="selectFeedback(event, 2)">
+          <!-- <div class="emoji-text">OK</div> -->
+          <div class="emoji ok"></div>
+          <div class="emoji-circle"></div>
+        </div>
+
+        <div class="emoji-item" onclick="selectFeedback(event, 3)">
+          <!-- <div class="emoji-text">Good</div> -->
+          <div class="emoji good"></div>
+          <div class="emoji-circle"></div>
+        </div>
+
+        <div class="emoji-item" onclick="selectFeedback(event, 4)">
+          <!-- <div class="emoji-text">Super</div> -->
+          <div class="emoji super"></div>
+          <div class="emoji-circle"></div>
         </div>
       </div>
-      <div class="content-wrapper thankyou">
-        <div class="title">Thankyou</div>
-        <div class="description">Your feedback is submitted successfully</div>
-        <div class="rotating-globe">
-          <script
-            src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
-            type="module"
-          ></script>
-          <dotlottie-player
-            src="https://lottie.host/b284b0ad-247a-4190-8b41-e330decf958d/0elnLEFVxN.lottie"
-            background="transparent"
-            speed="1"
-            style="width: 300px; height: 300px"
-            loop
-            autoplay
-          ></dotlottie-player>
-        </div>
+      <div class="button-wrapper">
+        <div class="effects"></div>
+        <div class="button">SUBMIT</div>
+      </div>
+    </div>
+    <div class="content-wrapper thankyou fadeout-right hide">
+      <div class="title">Thankyou</div>
+      <div class="description">Your feedback is submitted successfully</div>
+      <div class="rotating-globe">
+        <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+          type="module"></script>
+        <dotlottie-player src="https://lottie.host/b284b0ad-247a-4190-8b41-e330decf958d/0elnLEFVxN.lottie"
+          background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay></dotlottie-player>
       </div>
     </div>
 
-    <script src="index.js"></script>
-  </body>
+    <div class="content-wrapper pin fadeout-right hide">
+      <div class="title">Enter PIN</div>
+      <div class="description">Enter pin to download the feedback data</div>
+      <div class="pin-wrapper">
+        <input type="password" maxlength="1" class="pin-input"
+          oninput="autoTab(this, document.getElementById('input2'))">
+        <input type="password" maxlength="1" class="pin-input" id="input2"
+          oninput="autoTab(this, document.getElementById('input3'))">
+        <input type="password" maxlength="1" class="pin-input" id="input3"
+          oninput="autoTab(this, document.getElementById('input4'))">
+        <input type="password" maxlength="1" class="pin-input" id="input4" oninput="checkPin()">
+      </div>
+      <div class="button-wrapper">
+        <div class="effects"></div>
+        <div class="button" id="download">DOWNLOAD</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+
 </html>

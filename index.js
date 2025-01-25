@@ -1,139 +1,3 @@
-document.body.ontouchmove = function (event) {
-  event.stopImmediatePropagation();
-  event.stopPropagation();
-  event.preventDefault();
-};
-
-let title = document.getElementsByClassName("title")[0];
-let description = document.getElementsByClassName("description")[0];
-let content = document.getElementsByClassName("content")[0];
-
-let button = document.getElementsByClassName("button")[0];
-let effects = document.getElementsByClassName("effects")[0];
-
-let feedback = document.getElementsByClassName("feedback")[0];
-let thankyou = document.getElementsByClassName("thankyou")[0];
-
-let emojies = [];
-
-for (var i = 0; i < 5; i++) {
-  let emoji = document.getElementsByClassName("emoji-item")[i];
-  emojies.push(emoji);
-  setTimeout(() => {
-    emoji.classList.add("fadeup");
-  }, i * 100);
-}
-
-title.addEventListener("click", toogleFullScreen);
-
-button.addEventListener("click", submitFeedback);
-
-function submitFeedback() {
-  effects.style.display = "block";
-  thankyou.style.display = "block";
-
-  if (usrFeedback === 5) {
-    manager.addConfetti();
-  }
-
-  setTimeout(() => {
-    title.classList.remove("fadein");
-    description.classList.remove("fadein");
-    effects.style.display = "none";
-    // disableButton();
-    gotoThankyou();
-  }, 1500);
-
-  const xhr = new XMLHttpRequest();
-
-  xhr.open(
-    "POST",
-    "https://script.google.com/macros/s/AKfycbxIujcd8JAV12B84D-2nCEVkZgCaWMXheF5aRYydXPmRiUsgOwNhisWfbOkRMs4Fejn/exec",
-    true
-  );
-
-  // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-  xhr.onreadystatechange = () => {
-    // Call a function when the state changes.
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      console.log(JSON.parse(xhr.responseText));
-    }
-  };
-
-  const formData = new FormData();
-  formData.append("Date", new Date().toLocaleDateString());
-  formData.append("Time", new Date().toLocaleTimeString());
-  formData.append("Feedback", usrFeedback);
-  formData.append("Note", "");
-  xhr.send(formData);
-}
-
-function gotoThankyou() {
-  feedback.classList.add("fadeoutleft");
-  thankyou.classList.add("fadeinleft");
-  disableButton();
-  setTimeout(() => {
-    feedback.classList.remove("fadeoutleft");
-    thankyou.classList.remove("fadeinleft");
-    clearEmoji();
-
-    setTimeout(() => {
-      thankyou.style.display = "none";
-    }, 1000);
-  }, 3000);
-}
-
-function gotoFeedback() {}
-// feedback.classList.add('fadeinleft');
-
-// gotoFeedback();
-
-function toogleFullScreen() {
-  if (content.requestFullscreen) {
-    content.requestFullscreen();
-  } else if (content.webkitRequestFullscreen) {
-    /* Safari */
-    content.webkitRequestFullscreen();
-  } else if (content.msRequestFullscreen) {
-    /* IE11 */
-    content.msRequestFullscreen();
-  }
-}
-
-let usrFeedback = 1;
-
-function selectFeedback(event, feedback) {
-  clearEmoji();
-  event.target.parentElement.getElementsByClassName(
-    "emoji-circle"
-  )[0].style.opacity = 1;
-
-  usrFeedback = feedback;
-
-  enableButton();
-}
-
-function enableButton() {
-  button.classList.add("select");
-  button.classList.remove("disable");
-}
-
-function disableButton() {
-  button.classList.remove("select");
-  button.classList.add("disable");
-}
-
-disableButton();
-
-function clearEmoji() {
-  usrFeedback = 1;
-  let emojieCircles = document.getElementsByClassName("emoji-circle");
-
-  for (let i = 0; i < emojieCircles.length; i++) {
-    emojieCircles[i].style.opacity = 0;
-  }
-}
 
 ("use strict");
 
@@ -406,7 +270,170 @@ class ConfettiManager {
   }
 }
 
+
+// Declaration of elements
+
+let title = document.getElementsByClassName("title")[0];
+let description = document.getElementsByClassName("description")[0];
+let content = document.getElementsByClassName("content")[0];
+let button = document.getElementsByClassName("button")[0];
+let effects = document.getElementsByClassName("effects")[0];
+let feedback = document.getElementsByClassName("feedback")[0];
+let thankyou = document.getElementsByClassName("thankyou")[0];
+let pin = document.getElementsByClassName("pin")[0];
+let emojies = [];
+let secret = '0000';
+var onlongtouch;
+var timer;
+var touchduration = 3000; //length of time we want the user to touch before we do something
 const manager = new ConfettiManager();
+
+//Library functions
+
+function touchstart() {
+  timer = setTimeout(gotoPin, touchduration);
+}
+
+function touchend() {
+  //stops short touches from firing the event
+  if (timer)
+    clearTimeout(timer); // clearTimeout, not cleartimeout..
+}
+
+function autoTab(current, next) {
+  if (current.value.length === current.maxLength) {
+    next.focus();
+  }
+}
+
+function submitFeedback() {
+  effects.style.display = "block";
+  thankyou.style.display = "block";
+
+  if (usrFeedback === 4) {
+    manager.addConfetti();
+  }
+
+  setTimeout(() => {
+    title.classList.remove("fadein");
+    description.classList.remove("fadein");
+    effects.style.display = "none";
+    // disableButton();
+    gotoThankyou();
+  }, 1500);
+}
+
+function init() {
+  for (var i = 0; i < 5; i++) {
+    let emoji = document.getElementsByClassName("emoji-item")[i];
+    emojies.push(emoji);
+    setTimeout(() => {
+      if (emoji) {
+        emoji.classList.add("fadeup");
+      }
+
+    }, i * 100);
+  }
+
+  title.addEventListener("click", toogleFullScreen);
+  button.addEventListener("click", submitFeedback);
+
+  document.body.ontouchmove = function (event) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    event.preventDefault();
+  };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function gotoPin() {
+  feedback.classList.add("fadeoutleft");
+  pin.classList.add("fadeinleft");
+}
+
+
+
+function gotoThankyou() {
+  feedback.classList.add("fadeoutleft");
+  thankyou.classList.add("fadeinleft");
+  disableButton();
+  setTimeout(() => {
+    feedback.classList.remove("fadeoutleft");
+    thankyou.classList.remove("fadeinleft");
+    clearEmoji();
+
+    setTimeout(() => {
+      thankyou.style.display = "none";
+    }, 1000);
+  }, 3000);
+}
+
+function gotoFeedback() { }
+// feedback.classList.add('fadeinleft');
+
+// gotoFeedback();
+
+function toogleFullScreen() {
+  if (content.requestFullscreen) {
+    content.requestFullscreen();
+  } else if (content.webkitRequestFullscreen) {
+    /* Safari */
+    content.webkitRequestFullscreen();
+  } else if (content.msRequestFullscreen) {
+    /* IE11 */
+    content.msRequestFullscreen();
+  }
+}
+
+let usrFeedback = 1;
+
+function selectFeedback(event, feedback) {
+  clearEmoji();
+  event.target.parentElement.getElementsByClassName(
+    "emoji-circle"
+  )[0].style.opacity = 1;
+
+  usrFeedback = feedback;
+
+  enableButton();
+}
+
+function enableButton() {
+  button.classList.add("select");
+  button.classList.remove("disable");
+}
+
+function disableButton() {
+  button.classList.remove("select");
+  button.classList.add("disable");
+}
+
+disableButton();
+
+function clearEmoji() {
+  usrFeedback = 1;
+  let emojieCircles = document.getElementsByClassName("emoji-circle");
+
+  for (let i = 0; i < emojieCircles.length; i++) {
+    emojieCircles[i].style.opacity = 0;
+  }
+}
+
+
 // manager.addConfetti();
 
 // const triggerButton = document.getElementById("show-again");
