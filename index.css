@@ -55,6 +55,9 @@ body {
 
 .content {
   overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: absolute;
 }
 
 .bg-wrapper {
@@ -105,17 +108,19 @@ body {
   margin-left: 0;
 }
 
-.content-wrapper {
+.page {
   position: absolute;
   color: white;
   margin: auto;
   width: 720px;
   left: calc(50% - 360px);
   top: calc(50% - 280px);
+  transition: 0.5s;
 }
 
 .disable {
   pointer-events: none;
+  user-select: none;
 }
 
 .emoji-item {
@@ -134,11 +139,18 @@ body {
   top: -100px;
   left: -8px;
   opacity: 0;
+  user-select: none;
 }
 
-.fadeup {
+.fadein-up {
   opacity: 1;
   margin-top: 0;
+  transition: 1s;
+}
+
+.fadeout-down {
+  opacity: 0;
+  margin-top: 20px;
   transition: 1s;
 }
 
@@ -147,6 +159,7 @@ body {
   gap: 50px;
   justify-content: center;
   height: 150px;
+  cursor: pointer;
 }
 
 .emoji-text {
@@ -162,6 +175,17 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   user-select: none;
+}
+
+.notes-input {
+  width: 660px;
+  height: 210px;
+  background-color: #ffffff1f;
+  border-radius: 5px;
+  outline: none;
+  color: white;
+  font-size: 24px;
+  resize: none;
 }
 
 .bad {
@@ -185,7 +209,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 150px;
+  margin-top: 110px;
 }
 
 .effects {
@@ -199,35 +223,36 @@ body {
   display: none;
 }
 
-/* .feedback {
-  left: calc(50% - 360px);
-  opacity: 1;
-  transition: 0.5s;
-} */
 
-.thankyou {
-  left: calc(50% - 210px);
-  opacity: 0;
-  transition: 0.5s;
-  display: none;
-}
 
-.fadeoutleft {
-  left: calc(50% - 560px);
+.fadeout-left {
+  left: calc(50% - 460px);
   opacity: 0;
-  transition: 0.5s;
 }
 
 .fadeout-right {
-  left: calc(50% - 360px);
+  left: calc(50% - 260px);
   opacity: 0;
-  transition: 0.5s;
 }
 
-.fadeinleft {
+.fadein-left {
   left: calc(50% - 360px);
   opacity: 1;
-  transition: 0.5s;
+}
+
+.fadein-right {
+  left: calc(50% - 360px);
+  opacity: 1;
+}
+
+.start-right {
+  left: calc(50% - 260px);
+  opacity: 0;
+}
+
+.start-left {
+  left: calc(50% - 460px);
+  opacity: 0;
 }
 
 .button {

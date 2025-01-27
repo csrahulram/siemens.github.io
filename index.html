@@ -18,9 +18,12 @@
       <div class="bg bg-left"></div>
       <div class="bg bg-right"></div>
     </div>
-    <div class="content-wrapper feedback">
-      <div class="title">Feedback</div>
-      <div class="description">Feel free to share your feedback with us.</div>
+    <div class="page feedback">
+      <div class="title">How did you enjoy the Experience center.</div>
+      <!-- <div class="description">Feel free to share your feedback with us.</div> -->
+      <br>
+      <br>
+      <br>
       <div class="emoji-wrapper">
         <!-- <div class="emoji-item" onclick="selectFeedback(event, 1)">
             <div class="emoji-text">Worst</div>
@@ -54,10 +57,10 @@
       </div>
       <div class="button-wrapper">
         <div class="effects"></div>
-        <div class="button">SUBMIT</div>
+        <div class="button" id="feedbackBtn">SUBMIT</div>
       </div>
     </div>
-    <div class="content-wrapper thankyou fadeout-right hide">
+    <div class="page thankyou hide">
       <div class="title">Thankyou</div>
       <div class="description">Your feedback is submitted successfully</div>
       <div class="rotating-globe">
@@ -68,21 +71,33 @@
       </div>
     </div>
 
-    <div class="content-wrapper pin fadeout-right hide">
+    <div class="page pin hide">
       <div class="title">Enter PIN</div>
       <div class="description">Enter pin to download the feedback data</div>
       <div class="pin-wrapper">
-        <input type="password" maxlength="1" class="pin-input"
-          oninput="autoTab(this, document.getElementById('input2'))">
-        <input type="password" maxlength="1" class="pin-input" id="input2"
-          oninput="autoTab(this, document.getElementById('input3'))">
-        <input type="password" maxlength="1" class="pin-input" id="input3"
-          oninput="autoTab(this, document.getElementById('input4'))">
-        <input type="password" maxlength="1" class="pin-input" id="input4" oninput="checkPin()">
+        <input type="password" maxlength="1" index="0" class="pin-input"
+          oninput="autoTab(event, this, document.getElementById('input2'))">
+        <input type="password" maxlength="1" index="1" class="pin-input" id="input2"
+          oninput="autoTab(event, this, document.getElementById('input3'))">
+        <input type="password" maxlength="1" index="2" class="pin-input" id="input3"
+          oninput="autoTab(event, this, document.getElementById('input4'))">
+        <input type="password" maxlength="1" index="3" class="pin-input" id="input4" oninput="setPin(event, this)">
       </div>
       <div class="button-wrapper">
         <div class="effects"></div>
-        <div class="button" id="download">DOWNLOAD</div>
+        <div class="button" id="downloadBtn">DOWNLOAD</div>
+      </div>
+    </div>
+
+    <div class="page notes hide">
+      <!-- <div class="title">More </div>
+      <div class="description">Enter pin to download the feedback data</div> -->
+      <div class="pin-wrapper">
+        <textarea type="text" maxlength="240" class="notes-input" oninput="updateNotes(this)"></textarea>
+      </div>
+      <div class="button-wrapper">
+        <div class="effects"></div>
+        <div class="button" id="notesBtn">SUBMIT</div>
       </div>
     </div>
   </div>
